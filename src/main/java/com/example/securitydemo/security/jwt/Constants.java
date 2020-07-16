@@ -5,6 +5,6 @@ package com.example.securitydemo.security.jwt;
  */
 public interface Constants {
 
-    String ADMIN = "ROLE_ADMIN";
-    String USER = "ROLE_USER";
+    String ADMIN = "user::get";
+    String USER = "item::get";
 }

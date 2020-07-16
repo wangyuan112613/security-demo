@@ -4,8 +4,10 @@ import com.example.securitydemo.controller.vm.ApiResponse;
 import com.example.securitydemo.controller.vm.JwtAuthenticationResponse;
 import com.example.securitydemo.controller.vm.LoginRequest;
 import com.example.securitydemo.model.Authority;
+import com.example.securitydemo.model.Roles;
 import com.example.securitydemo.model.Users;
 import com.example.securitydemo.repository.AuthorityRepository;
+import com.example.securitydemo.repository.RolesRepository;
 import com.example.securitydemo.repository.UserRepository;
 import com.example.securitydemo.security.jwt.TokenProvider;
 import java.net.URI;
@@ -36,6 +38,9 @@ public class AuthController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    RolesRepository rolesRepository;
 
     @Autowired
     AuthorityRepository authorityRepository;
@@ -71,20 +76,17 @@ public class AuthController {
 
         registry.setPassword(passwordEncoder.encode(registry.getPassword()));
 
-        Authority authority = authorityRepository.findByName("ROLE_USER")
-                                  .orElseThrow(() -> new RuntimeException("User Authority not set."));
+        Roles role = rolesRepository.findById(2L)
+                                    .orElseThrow(() -> new RuntimeException("User Role not set."));
 
         Users user = new Users();
         user.setUsername(registry.getUsername());
         user.setPassword(registry.getPassword());
-        user.setAuthorities(Collections.singleton(authority));
+        user.setEmail(registry.getEmail());
+        user.setRoles(Collections.singleton(role));
 
         Users result = userRepository.save(user);
 
-        URI location = ServletUriComponentsBuilder
-            .fromCurrentContextPath().path("/users/{username}")
-            .buildAndExpand(result.getUsername()).toUri();
-
-        return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+        return ResponseEntity.ok(new ApiResponse(true, "User registered successfully"));
     }
 }

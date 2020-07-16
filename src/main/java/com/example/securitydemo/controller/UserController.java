@@ -25,10 +25,11 @@ public class UserController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority(\"" + Constants.USER + "\")")
-    public ResponseEntity<Users> get(@PathVariable Long id) {
-        Users user = userRepository.findById(id)
-                                   .orElseThrow(() ->new UsernameNotFoundException("USER not found: " + id));
-
-        return ResponseEntity.ok().body(user);
+    public ResponseEntity<String> get(@PathVariable Long id) {
+//        Users user = userRepository.findById(id)
+//                                   .orElseThrow(() ->new UsernameNotFoundException("USER not found: " + id));
+//
+//        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok("ok");
     }
 }

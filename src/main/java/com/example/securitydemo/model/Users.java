@@ -34,13 +34,17 @@ public class Users {
     private String username;
 
     @NotBlank
+    @Size(max = 30)
+    private String email;
+
+    @NotBlank
     @Size(max = 100)
     @Column(name = "password_hash")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_authority",
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
         joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "authority_name"))
-    private Set<Authority> authorities = new HashSet<>();
+        inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Roles> roles = new HashSet<>();
 }

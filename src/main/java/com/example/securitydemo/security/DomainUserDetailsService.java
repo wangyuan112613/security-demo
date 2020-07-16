@@ -1,11 +1,17 @@
 package com.example.securitydemo.security;
 
+import com.example.securitydemo.model.Authority;
+import com.example.securitydemo.model.Roles;
 import com.example.securitydemo.model.Users;
 import com.example.securitydemo.repository.UserRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,17 +35,26 @@ public class DomainUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
 
-        return  userRepository.findOneWithAuthoritiesByUsername(login)
+        return  userRepository.findByUsername(login)
                                            .map(user -> mapSpringSecurityUser(login, user))
                                            .orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));
     }
 
     private User mapSpringSecurityUser(String lowercaseLogin, Users user) {
-        var grantedAuthorities = user.getAuthorities()
-                                     .stream()
-                                     .map(authority -> new SimpleGrantedAuthority(authority.getName()))
-                                     .collect(Collectors.toList());
+        List<GrantedAuthority> auths = new ArrayList<>();
+        Set<Roles> roles = user.getRoles();
 
-        return new User(user.getUsername(), user.getPassword(), grantedAuthorities);
+        for (Roles role : roles) {
+            for (Authority authority : role.getAuthoritys()) {
+                auths.add(new SimpleGrantedAuthority(authority.getName()));
+            }
+        }
+        return new User(user.getUsername(), user.getPassword(), auths);
+//        var grantedAuthorities = user.getRoles()
+//                                     .stream()
+//                                     .map(authority -> new SimpleGrantedAuthority(authority.getName()))
+//                                     .collect(Collectors.toList());
+//
+//        return new User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }
 }

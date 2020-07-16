@@ -8,9 +8,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<Users, Long>, JpaSpecificationExecutor<Users> {
-    Optional<Users> findByUsername(String username);
 
     boolean existsByUsername(String username);
 
-    Optional<Users> findOneWithAuthoritiesByUsername(String username);
+    Optional<Users> findByUsername(String username);
 }

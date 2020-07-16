@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
  * 权限
  */
 @Repository
-public interface AuthorityRepository extends JpaRepository<Authority, String> {
+public interface AuthorityRepository extends JpaRepository<Authority, Long> {
 
     Optional<Authority> findByName(String s);
 }
