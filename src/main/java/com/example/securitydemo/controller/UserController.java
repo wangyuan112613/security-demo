@@ -24,7 +24,7 @@ public class UserController {
     UserRepository userRepository;
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority(\"" + Constants.USER + "\")")
+//    @PreAuthorize("hasAuthority(\"" + Constants.USER + "\")")
     public ResponseEntity<String> get(@PathVariable Long id) {
 //        Users user = userRepository.findById(id)
 //                                   .orElseThrow(() ->new UsernameNotFoundException("USER not found: " + id));

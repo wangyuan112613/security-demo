@@ -14,7 +14,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  *
@@ -24,6 +29,11 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "user")
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@ToString(of = {"id","username","email","password"})
+@Builder
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

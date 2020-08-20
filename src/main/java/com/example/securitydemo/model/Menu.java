@@ -8,34 +8,31 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString(of = {"id","name"})
-@EqualsAndHashCode
-@Table(name = "role")
-public class Roles {
+//@Entity
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@Table(name = "menu")
+public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 25)
     private String name;
 
-    @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
-    private List<Users>      users;
+    private String url;
 
-    //急加载 会查询authority
-    @ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER)
+    private Integer order;
+
+    private Menu parent;
+
+    private List<Menu> children;
+
+    //急加载 会查询role表
+    @ManyToMany(mappedBy = "menu",fetch = FetchType.EAGER)
     private List<Authority> authorities;
 }
